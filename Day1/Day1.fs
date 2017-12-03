@@ -1,7 +1,4 @@
-﻿// Learn more about F# at http://fsharp.org
-// See the 'F# Tutorial' project for more help.
-
-module Program
+﻿module Program
 open System
 
 // Convert a character to it's numerical equivalent
