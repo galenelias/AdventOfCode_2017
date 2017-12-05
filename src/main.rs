@@ -1,7 +1,12 @@
-using clap::{Arg,App};
+extern crate clap;
 
+use clap::{Arg,App};
+
+mod day3;
 
 fn main() {
-    
-    println!("Test!!");
+	
+	day3::solve();
+
+	println!("Test!!");
 }

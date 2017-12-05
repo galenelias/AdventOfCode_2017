@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-fn main() {
+pub fn solve() {
 
 	let input = 
 	[
