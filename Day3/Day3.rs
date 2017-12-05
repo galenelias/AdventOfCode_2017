@@ -48,7 +48,6 @@ fn sum_grid(grid: &HashMap<(i32,i32),i32>, x: i32, y: i32) -> i32 {
     let mut sum = 0;
     for xoffset in -1..2 {
         for yoffset in -1..2 {
-            // println!("Summing ({} + {}, {} + {}", x, xoffset, y, yoffset);
             match grid.get(&(x + xoffset, y + yoffset)) {
                 Some(&number) => sum += number,
                 _ => {} /*no-op*/,
@@ -75,8 +74,6 @@ fn part2() {
     for i in 1.. {
         let cell_value = sum_grid(&grid, x, y);
         grid.insert((x,y), cell_value);
-
-        // println!("Iteration: {}, x={}, y={}  value={}", i, x, y, cell_value);
 
         if cell_value > 277678 {
             println!("Iteration: {}, x={}, y={}  value={}", i, x, y, cell_value);

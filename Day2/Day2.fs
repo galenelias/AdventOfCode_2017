@@ -8,9 +8,6 @@ let diffOfMaxMin values = Seq.max values - Seq.min values
 
 [<EntryPoint>]
 let main argv = 
-//     let inputString = "5\t9\t2\t8
-// 9\t4\t7\t3
-// 3\t8\t6\t5"
     let inputString = "179	2358	5197	867	163	4418	3135	5049	187	166	4682	5080	5541	172	4294	1397
 2637	136	3222	591	2593	1982	4506	195	4396	3741	2373	157	4533	3864	4159	142
 1049	1163	1128	193	1008	142	169	168	165	310	1054	104	1100	761	406	173
