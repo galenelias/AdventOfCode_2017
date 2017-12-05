@@ -9,7 +9,7 @@ enum Direction {
 }
 
 // Manually simulate walking the spiral, keeping track of heading, distance to walk, and current coordinates
-fn part1() {
+pub fn part1() {
     let mut x = 0;
     let mut y = 0;
     let mut dir = Direction::East;
@@ -59,7 +59,7 @@ fn sum_grid(grid: &HashMap<(i32,i32),i32>, x: i32, y: i32) -> i32 {
 
 // Manually simulate walking the spiral again, storing the square values in a HashMap (rather
 // than trying to figure out flexible infinite grid storage)
-fn part2() {
+pub fn part2() {
     let mut x = 0;
     let mut y = 0;
     let mut dir = Direction::East;
@@ -103,10 +103,10 @@ fn part2() {
     }
 }
 
-fn main() {
-    println!("Part 1:");
-    part1();
+// fn main() {
+//     println!("Part 1:");
+//     part1();
 
-    println!("\nPart 2:");
-    part2();
-}
+//     println!("\nPart 2:");
+//     part2();
+// }
