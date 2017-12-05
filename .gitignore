@@ -1,6 +1,7 @@
 #Ignore manually built files
 *.exe
 *.dll
+a.out
 
 
 ## Ignore Visual Studio temporary files, build results, and
