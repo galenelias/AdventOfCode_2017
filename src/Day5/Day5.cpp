@@ -4,32 +4,31 @@
 
 int main()
 {
-    std::string input;
+	std::string input;
 
-    std::vector<int> instructions;
-    int counter = 0;
-    while (std::getline(std::cin, input) && !input.empty())
-    {
-        instructions.push_back(std::stoi(input));
-    }
+	std::vector<int> instructions;
+	int counter = 0;
+	while (std::getline(std::cin, input) && !input.empty())
+	{
+		instructions.push_back(std::stoi(input));
+	}
 
-    int pc = 0;
-    int iterations = 0;
-    for (;;)
-    {
-        if (pc >= instructions.size())
-            break;
-        iterations++;
-        int jumpCount = instructions[pc];
+	int pc = 0;
+	int iterations = 0;
+	for (;;)
+	{
+		if (pc >= instructions.size())
+			break;
+		iterations++;
+		int jumpCount = instructions[pc];
 
-        if (instructions[pc] >= 3)
-            instructions[pc]--;
-        else
-            instructions[pc]++;
+		if (instructions[pc] >= 3)
+			instructions[pc]--;
+		else
+			instructions[pc]++;
 
-        pc += jumpCount;
-    }
+		pc += jumpCount;
+	}
 
-    std::cout << "Exited in " << iterations << std::endl;
+	std::cout << "Exited in " << iterations << std::endl;
 }
-
