@@ -8,6 +8,16 @@
         "string_view": "cpp",
         "utility": "cpp",
         "vector": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "algorithm": "cpp",
+        "map": "cpp",
+        "__tree": "cpp",
+        "set": "cpp",
+        "unordered_set": "cpp",
+        "typeinfo": "cpp",
+        "iostream": "cpp",
+        "hash_map": "cpp",
+        "hash_set": "cpp",
+        "unordered_map": "cpp"
     }
 }
