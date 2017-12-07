@@ -103,7 +103,7 @@ fn part2() {
     }
 }
 
-fn main() {
+pub fn solve() {
     println!("Part 1:");
     part1();
 
