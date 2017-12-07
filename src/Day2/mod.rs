@@ -39,5 +39,4 @@ pub fn solve() {
 
 	println!("Part 1: {}", part1);
 	println!("Part 2: {}", part2);
-	println!("Part 2: {}", part2_functional);
 }
