@@ -3,126 +3,124 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
-#include <map>
 #include <algorithm>
-#include <set>
 
 using namespace std;
 
-vector<string> split(const string& input, const string& separator)
+vector<string> split(const string &input, const string &separator)
 {
-    vector<string> result;
-    size_t last_pos = 0;
-    size_t pos = 0;
-    while ((pos = input.find(separator, last_pos)) != string::npos)
-    {
-        if (pos - last_pos > 0)
-            result.push_back(input.substr(last_pos, pos - last_pos));
-        last_pos = pos + separator.size();
-    }
-    result.push_back(input.substr(last_pos));
-    return result;
+	vector<string> result;
+	size_t last_pos = 0;
+	size_t pos = 0;
+	while ((pos = input.find(separator, last_pos)) != string::npos)
+	{
+		if (pos - last_pos > 0)
+			result.push_back(input.substr(last_pos, pos - last_pos));
+		last_pos = pos + separator.size();
+	}
+	result.push_back(input.substr(last_pos));
+	return result;
 }
 
 struct Disc
 {
 	string name;
-	int weight;
-
+	int weight = 0;
 	vector<string> subDiscs;
+
+	int totalWeight = 0;
 };
 
-vector<Disc> discInput;
-unordered_map<string, Disc> discHash;
-set<string> discNames;
+unordered_map<string, Disc> discMap;
 
-int GetWeight(const string& start)
+int ComputeAndCacheWeight(const string& start)
 {
-	Disc& d = discHash[start];
+	Disc& d = discMap[start];
 	int weight = d.weight;
 	for (auto& subTower : d.subDiscs)
-	{
-		weight += GetWeight(subTower);
-	}
+		weight += ComputeAndCacheWeight(subTower);
+	
+	// Cache off tower weight
+	d.totalWeight = weight;
 	return weight;
 }
 
-int FindUnbalance(const string& start, int ideal)
+int FindUnbalance(const string& rootDisc, int expectedWeight)
 {
-	Disc& d = discHash[start];
-
-	vector<int> weightsArr;
-	unordered_map<int, int> weights;
+	const Disc& d = discMap[rootDisc];
+	unordered_map<int, int> weightBuckets;
 
 	for (auto& subTower : d.subDiscs)
-	{
-		weightsArr.push_back(GetWeight(subTower));
-		weights[weightsArr.back()]++;
-	}
+		weightBuckets[discMap[subTower].totalWeight]++;
 
-	if (weights.size() > 1)
+	// If our sub-towers are uneven, recurse down the 'odd man out'
+	if (weightBuckets.size() > 1)
 	{
 		int idealWeight = 0;
-		for (auto& p : weights)
+		for (auto& p : weightBuckets)
 		{
 			if (p.second > 1)
 				idealWeight = p.first;
 		}
 
-		for (size_t i = 0; i < weightsArr.size(); ++i)
+		for (auto &subTower : d.subDiscs)
 		{
-			ideal -= discHash[d.subDiscs[i]].weight;
-			if (weights[weightsArr[i]] == 1)
-				return FindUnbalance(d.subDiscs[i], idealWeight);
+			if (weightBuckets[discMap[subTower].totalWeight] == 1)
+				return FindUnbalance(subTower, idealWeight);
 		}
+		cerr << "Unexpected!! Should have found single unbalanced child disc under " << rootDisc << "\n";
+		return -1;
 	}
 	else
 	{
-		for (auto w : weightsArr)
-			ideal -= w;
+		// Otherwise, we're the unbalanced disc, so figure out how much we should weigh by
+		// removing our children's weight from the expected weight
+		for (auto &subTower : d.subDiscs)
+			expectedWeight -= discMap[subTower].totalWeight;
 	}
 
-	return d.weight - ideal;
+	// return d.weight - expectedWeight;
+	return expectedWeight;
 }
 
 int main()
 {
-    string input;
-    while (getline(cin, input) && !input.empty())
-    {
-		vector<string> input_split = split(input, " ");
+	unordered_set<string> allDiscNames;
 
-		discInput.push_back(Disc());
-		discInput.back().name = input_split[0];
-		discInput.back().weight = stoi(input_split[1].substr(1, input_split[1].size() - 2));
-
-		if (input_split.size() > 2)
-		{
-			for (size_t i = 3; i < input_split.size(); ++i)
-				discInput.back().subDiscs.push_back(input_split[i].substr(0, input_split[i].find(',')));
-		}
-
-		discNames.insert(discInput.back().name);
-
-		discHash[discInput.back().name] = discInput.back();
-    }
-
-	for (auto& disc : discInput)
+	string line;
+	while (getline(cin, line) && !line.empty())
 	{
-		for (auto& subDisc : disc.subDiscs)
-		{
-			auto iter = discNames.find(subDisc);
-			if (iter != end(discNames))
-				discNames.erase(iter);
-		}
+		vector<string> line_split = split(line, " -> ");
+		vector<string> nameAndWeight = split(line_split[0], " ");
+
+		Disc d;
+		d.name = nameAndWeight[0];
+		d.weight = stoi(nameAndWeight[1].substr(1, nameAndWeight[1].size() - 2));
+
+		if (line_split.size() > 1)
+			d.subDiscs = split(line_split[1], ", ");
+
+		allDiscNames.insert(d.name);
+
+		discMap[d.name] = d;
 	}
 
-	for (auto& name : discNames)
+	for (auto& discKV : discMap)
+		for (auto& subDisc : discKV.second.subDiscs)
+			allDiscNames.erase(subDisc);
+
+	if (allDiscNames.size() != 1)
 	{
-		cout << "Name: " << name << endl;
-		cout << "Unbalance: " << FindUnbalance(name, 0) << endl;
+		cout << "Bad input. " << allDiscNames.size() << " base discs found.\n";
+		return -1;
 	}
 
-    return 0;
+	string baseDisc = *(allDiscNames.begin());
+	cout << "Base disc: " << baseDisc << endl;
+
+	ComputeAndCacheWeight(baseDisc);
+	cout << "Corrected weight: " << FindUnbalance(baseDisc, 0) << endl;
+
+	return 0;
 }
 
