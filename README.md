@@ -3,10 +3,11 @@ Dumping ground for Advent of Code 2017 solutions in various languages (C++, Rust
 
 | Problem | C++ | Rust | F# |
 |---------|-----|------|----|
-| Day1    |  ✔  |  ✔   |  ✔ |
-| Day2    |     |  ✔   |  ✔ |
-| Day3    |     |  ✔   |    |
-| Day4    |     |  ✔   |    |
-| Day5    |  ✔  |      |    |
-| Day6    |  ✔  |      |    |
-| Day7    |  ✔  |      |    |
+| Day 1   |  ✔  |  ✔   |  ✔ |
+| Day 2   |     |  ✔   |  ✔ |
+| Day 3   |     |  ✔   |    |
+| Day 4   |     |  ✔   |    |
+| Day 5   |  ✔  |  ✔   |    |
+| Day 6   |  ✔  |  ✔   |    |
+| Day 7   |  ✔  |      |    |
+| Day 8   |  ✔  |      |    |
