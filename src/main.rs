@@ -1,4 +1,5 @@
 extern crate clap;
+extern crate regex;
 
 use clap::{Arg,App};
 
@@ -6,8 +7,11 @@ mod day1;
 mod day2;
 mod day3;
 mod day4;
-// mod day5;
-// mod day6;
+mod day5;
+mod day6;
+mod day7;
+mod day8;
+mod day9;
 
 fn main() {
 
@@ -38,8 +42,11 @@ fn main() {
 		2 => day2::solve(),
 		3 => day3::solve(),
 		4 => day4::solve(),
-		// 5 => day5::solve(),
-		// 6 => day6::solve(),
+		5 => day5::solve(),
+		6 => day6::solve(),
+		7 => day7::solve(),
+		8 => day8::solve(),
+		9 => day9::solve(),
 		_ => println!("Oops! Day {} isn't implemented yet!", day)
 	}
 }
