@@ -1,8 +1,14 @@
 extern crate clap;
 extern crate regex;
+extern crate serde_json;
+extern crate chrono;
+
+#[macro_use]
+extern crate serde_derive;
 
 use clap::{Arg,App};
 
+mod stats;
 mod day1;
 mod day2;
 mod day3;
@@ -12,6 +18,17 @@ mod day6;
 mod day7;
 mod day8;
 mod day9;
+
+// #[derive(Serialize, Deserialize)]
+// struct Member {
+// 	last_star_ts : String,
+// 	// completion_day_level
+// 	id : String,
+// 	local_score : i32,
+// 	name : String,
+// 	global_score : i32,
+// 	stars : i32,
+// }
 
 fn main() {
 
@@ -29,12 +46,21 @@ fn main() {
 					str.parse::<u32>()
 						.or(Err("day must be an integer".to_owned()))
 						.and_then(|v| match v {
-							1...25 => Ok(()),
+							0...25 => Ok(()),
 							_ => Err("day must be between 1 and 25".to_owned())
 						})))
+		.arg(
+			Arg::with_name("stats")
+				.long("stats")
+				.help("Parses leaderboard JSON into a readable format"))
 		.after_help("Longer explaination to appear after the options when \
 					displaying the help information from --help or -h")
 		.get_matches();
+
+	if matches.is_present("stats") {
+		stats::show_stats(matches.value_of("day").unwrap_or("0").parse::<u32>().unwrap());
+		return;
+	}
 
 	let day = matches.value_of("day").unwrap().parse::<u32>().unwrap();
 	match day {

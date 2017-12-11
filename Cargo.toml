@@ -6,6 +6,10 @@ authors = ["Galen Elias <gelias@gmail.com>"]
 [dependencies]
 clap = "*"
 regex = "*"
+serde = "*"
+serde_json = "*"
+serde_derive = "*"
+chrono = "*"
 
 [[bin]]
 name = "aoc"
