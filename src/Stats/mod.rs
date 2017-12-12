@@ -47,7 +47,10 @@ pub fn show_stats(day_filter : u32) {
 		for (day, _) in &m.completion_day_level {
 			max_day = cmp::max(max_day, day.parse::<u32>().unwrap());
 		}
-		members.push(m);
+
+		if !m.completion_day_level.is_empty() {
+			members.push(m);
+		}
 	}
 
 	members.sort_by(|a,b| b.local_score.cmp(&a.local_score));
