@@ -3,7 +3,6 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
-#include <map>
 #include <algorithm>
 
 using namespace std;
@@ -23,69 +22,53 @@ vector<string> split(const string& input, const string& separator)
 	return result;
 }
 
-unordered_map<int, vector<int>> nodes;
-
-
-void find_closure(int node, unordered_set<int>& closure)
+void find_group(int node, unordered_map<int, vector<int>>& nodes, unordered_set<int>& group)
 {
-	if (closure.count(node) != 0)
+	auto result = group.insert(node);
+	if (result.second == false) // Not inserted, therefore already known
 		return;
 
-	closure.insert(node);
-
 	for (int neighbor : nodes[node])
-	{
-		find_closure(neighbor, closure);
-	}
+		find_group(neighbor, nodes, group);
 }
 
 int main()
 {
-	vector<string> lines;
-	vector<vector<string>> lines_split;
+	unordered_set<int> ungroupedNodes;
+	unordered_map<int, vector<int>> nodes;
 
 	string input;
-
 	while (getline(cin, input) && !input.empty())
 	{
 		vector<string> a = split(input, " <-> ");
 		int n = stoi(a[0]);
 
 		vector<int> neighbors;
-		if (a.size() > 1)
-		{
-			vector<string> b = split(a[1], ", ");
-			for (const auto& c : b)
-				neighbors.push_back(stoi(c));
-		}
+		vector<string> b = split(a[1], ", ");
+		for (const auto& c : b)
+			neighbors.push_back(stoi(c));
 
-		nodes[n] = neighbors;
+		ungroupedNodes.insert(n);
+		nodes[n] = std::move(neighbors);
 	}
-
-	unordered_set<int> closure_0;
-	find_closure(0, closure_0);
 
 	vector<unordered_set<int>> allGroups;
-
-	for (const auto& kv : nodes)
+	while (!ungroupedNodes.empty())
 	{
-		bool found = false;
-		for (const auto& group : allGroups)
-		{
-			if (group.count(kv.first) != 0)
-				found = true;
-		}
+		unordered_set<int> group;
+		find_group(*(ungroupedNodes.begin()), nodes, group);
 
-		if (found == false)
-		{
-			unordered_set<int> closure;
-			find_closure(kv.first, closure);
-			allGroups.push_back(std::move(closure));
-		}
+		for (int node : group)
+			ungroupedNodes.erase(node);
+
+		allGroups.push_back(std::move(group));
 	}
 
-	cout << "Part 1: " << closure_0.size() << endl;
-	cout << "Part 2: " << allGroups.size() << endl;
+	size_t group0size = find_if(allGroups.begin(), allGroups.end(),
+						[](auto& group) { return group.count(0) == 1; })->size();
+
+	cout << "Group 0 size (Part 1): " << group0size << endl;
+	cout << "Number of groups (Part 2): " << allGroups.size() << endl;
 
 	return 0;
 }
