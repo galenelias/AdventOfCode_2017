@@ -12,3 +12,5 @@ Dumping ground for Advent of Code 2017 solutions in various languages (C++, Rust
 | Day 7   |  ✔  |  ✔   |    |
 | Day 8   |  ✔  |  ✔   |    |
 | Day 9   |  ✔  |  ✔   |    |
+| Day 10  |  ✔  |      |    |
+| Day 11  |  ✔  |      |    |

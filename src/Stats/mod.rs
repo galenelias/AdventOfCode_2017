@@ -36,12 +36,7 @@ pub fn show_stats(day_filter : u32) {
 	let stdin = io::stdin();
 	let input = stdin.lock().lines().next().unwrap().unwrap();
 
-	// let v: Value = serde_json::from_str(input.as_ref());
-	// let v = serde_json::from_str(input.as_ref());
-	// let leaderboard: LeaderBoard = serde_json::from_str(input.as_ref()).unwrap();
-	// let v: Value = serde_json::from_str(input.as_ref()).unwrap();
 	let leaderboard: LeaderBoard = serde_json::from_str(input.as_ref()).unwrap();
-	// let leaderboard: LeaderBoard = v;
 
 	let mut members : Vec<Member> = Vec::new();
 	let mut max_day = 1;
@@ -52,7 +47,10 @@ pub fn show_stats(day_filter : u32) {
 		for (day, _) in &m.completion_day_level {
 			max_day = cmp::max(max_day, day.parse::<u32>().unwrap());
 		}
-		members.push(m);
+
+		if !m.completion_day_level.is_empty() {
+			members.push(m);
+		}
 	}
 
 	members.sort_by(|a,b| b.local_score.cmp(&a.local_score));
