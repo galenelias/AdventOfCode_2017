@@ -30,14 +30,15 @@ void twist(vector<int>& buffer, const vector<int> lengths, int rounds)
 	int skipCount = 0;
 	int start = 0;
 
+	const size_t buf_len = buffer.size();
 	for (int round = 0; round < rounds; ++round)
 	{
 		for (int len : lengths)
 		{
 			for (int i = 0; i < len / 2; i++)
-				std::swap(buffer[(start + i) % buffer.size()], buffer[(start + len - i - 1) % buffer.size()]);
+				std::swap(buffer[(start + i) % buf_len], buffer[(start + len - i - 1) % buf_len]);
 
-			start = (start + len + skipCount) % buffer.size();
+			start = (start + len + skipCount) % buf_len;
 			skipCount++;
 		}
 	}
