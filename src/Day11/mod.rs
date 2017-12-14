@@ -7,7 +7,8 @@ fn hex_distance(x: i32, y: i32, z: i32) -> i32 {
 
 pub fn solve() {
 	println!("Enter input:");
-	let input = io::stdin().lock().lines().next().unwrap().unwrap();
+	let stdin = io::stdin();
+	let input = stdin.lock().lines().next().unwrap().unwrap();
 
 	let (mut x, mut y, mut z) = (0, 0, 0);
 	let mut max_dist = 0;
