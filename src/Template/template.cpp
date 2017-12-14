@@ -25,26 +25,11 @@ vector<string> split(const string& input, const string& separator)
 
 int main()
 {
-	vector<string> lines;
-	vector<vector<string>> lines_split;
-
 	string input;
 	while (getline(cin, input) && !input.empty())
 	{
-		lines.push_back(input);
-		lines_split.push_back(split(input, " "));
 	}
 
-	cout << "Lines split:\n";
-	for (const auto& l : lines_split)
-	{
-		cout << "(" << l.size() << ") ";
-		for (const auto& s : l)
-			cout << "[" << s << "] ";
-		cout << "\n";
-	}
-
-	// cout << "Result " << 0 << endl;
 	return 0;
 }
 
