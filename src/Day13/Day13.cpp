@@ -27,15 +27,27 @@ struct scanner
 {
 	int depth = 0;
 	int range = 0;
-	int position = 0;
-	int direction = 1;
 };
+
+std::pair<bool, int> CheckScanners(const vector<scanner>& scanners, int delay)
+{
+	bool good = true;
+	int score = 0;
+
+	for (auto& scanner : scanners)
+	{
+		if ((scanner.depth + delay) % ((scanner.range - 1) * 2) == 0)
+		{
+			score += scanner.depth * scanner.range;
+			good = false;
+		}
+	}
+
+	return { good, score };
+}
 
 int main()
 {
-	vector<string> lines;
-	vector<vector<string>> lines_split;
-
 	string input;
 
 	vector<scanner> scanners;
@@ -51,85 +63,18 @@ int main()
 		scanners.push_back(s);
 	}
 
-	for (int delay = 0; ; delay++)
-	{
-		if (delay % 10000 == 0)
-			cout << "Delay: " << delay << endl;
+	int delay0_score = 0;
+	tie(ignore, delay0_score) = CheckScanners(scanners, 0 /*delay*/);
+	cout << "Part 1: " << delay0_score << endl;
 
-		bool good = true;
-		for (auto& scanner : scanners)
-		{
-			if ((scanner.depth + delay) % ((scanner.range - 1) * 2) == 0)
-			{
-				good = false;
-				break;
-			}
-		}
+	bool good = false;
+	for (int delay = 0; !good; delay++)
+	{
+		tie(good, ignore) = CheckScanners(scanners, delay);
 
 		if (good)
-		{
 			cout << "Min delay = " << delay << endl;
-			break;
-		}
 	}
-
-	//for (int delay = 0; ; delay++)
-	//{
-	//	int pos = -1;
-	//	int score = 0;
-
-	//	if (delay % 10000 == 0)
-	//		cout << "Delay: " << delay << endl;
-
-	//	vector<scanner> scanners = orig_scanners;
-	//	for (int i = 0; i < delay; i++)
-	//	{
-	//		for (auto& scanner : scanners)
-	//		{
-	//			scanner.position += scanner.direction;
-	//			if (scanner.position == 0 && scanner.direction == -1)
-	//				scanner.direction = 1;
-	//			else if (scanner.position == scanner.range - 1 && scanner.direction == 1)
-	//				scanner.direction = -1;
-	//		}
-	//	}
-
-	//	int scanner_offset = 0;
-
-	//	while (pos <= scanners.back().depth)
-	//	{
-	//		pos += 1;
-
-	//		while (scanner_offset < scanners.size() && scanners[scanner_offset].depth < pos)
-	//			scanner_offset++;
-
-	//		if (scanner_offset >= scanners.size())
-	//			break;
-
-	//		if (scanners[scanner_offset].depth == pos && scanners[scanner_offset].position == 0)
-	//			score += scanners[scanner_offset].depth * scanners[scanner_offset].range + 1;
-
-	//		if (score != 0)
-	//			break;
-	//		
-	//		for (auto& scanner : scanners)
-	//		{
-	//			scanner.position += scanner.direction;
-	//			if (scanner.position == 0 && scanner.direction == -1)
-	//				scanner.direction = 1;
-	//			else if (scanner.position == scanner.range - 1 && scanner.direction == 1)
-	//				scanner.direction = -1;
-	//		}
-	//	}
-
-	//	if (score == 0)
-	//	{
-	//		cout << "Min delay = " << delay << endl;
-	//		break;
-	//	}
-	//	//cout << "Result " << score << endl;
-	//}
-
 
 	return 0;
 }
