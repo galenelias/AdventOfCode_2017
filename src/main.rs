@@ -6,6 +6,7 @@ extern crate chrono;
 #[macro_use]
 extern crate serde_derive;
 
+
 use clap::{Arg,App};
 
 mod stats;
@@ -21,6 +22,8 @@ mod day9;
 mod day10;
 mod day11;
 mod day12;
+mod day13;
+mod day14;
 mod day15;
 
 // #[derive(Serialize, Deserialize)]
@@ -80,6 +83,8 @@ fn main() {
 		10 => day10::solve(),
 		11 => day11::solve(),
 		12 => day12::solve(),
+		13 => day13::solve(),
+		14 => day14::solve(),
 		15 => day15::solve(),
 		_ => println!("Oops! Day {} isn't implemented yet!", day)
 	}
