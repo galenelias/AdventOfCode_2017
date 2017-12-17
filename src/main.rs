@@ -1,3 +1,5 @@
+#![feature(slice_rotate)]
+
 extern crate clap;
 extern crate regex;
 extern crate serde_json;
@@ -25,17 +27,7 @@ mod day12;
 mod day13;
 mod day14;
 mod day15;
-
-// #[derive(Serialize, Deserialize)]
-// struct Member {
-// 	last_star_ts : String,
-// 	// completion_day_level
-// 	id : String,
-// 	local_score : i32,
-// 	name : String,
-// 	global_score : i32,
-// 	stars : i32,
-// }
+mod day16;
 
 fn main() {
 
@@ -86,6 +78,7 @@ fn main() {
 		13 => day13::solve(),
 		14 => day14::solve(),
 		15 => day15::solve(),
+		16 => day16::solve(),
 		_ => println!("Oops! Day {} isn't implemented yet!", day)
 	}
 }
