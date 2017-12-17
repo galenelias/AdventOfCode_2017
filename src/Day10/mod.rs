@@ -22,10 +22,10 @@ fn part1(input : &String) -> u32 {
 	let lengths : Vec<usize> = input.split(',').filter_map(|el| el.parse::<usize>().ok()).collect();
 	let mut buffer : Vec<u32> = (0..256).collect();
 	rotate(&lengths, &mut buffer, 1);
-	buffer[0] * buffer[1]
+	(buffer[0] as u32) * (buffer[1] as u32)
 }
 
-fn part2(input : &String) -> String {
+pub fn knot_hash(input: &String) -> Vec<u32> {
 	let mut lengths : Vec<usize> = input.chars().map(|c| c as usize).collect();
 	lengths.extend(&[17, 31, 73, 47, 23]);
 
@@ -34,6 +34,13 @@ fn part2(input : &String) -> String {
 
 	buffer.chunks(16)
 		.map(|chunk| chunk.iter().fold(0, |acc, &val| acc ^ val))
+		.collect::<Vec<u32>>()
+}
+
+fn part2(input : &String) -> String {
+	let hash = knot_hash(input);
+
+	hash.iter()
 		.map(|xor| format!("{:02x}", xor))
 		.collect::<Vec<String>>()
 		.join("")

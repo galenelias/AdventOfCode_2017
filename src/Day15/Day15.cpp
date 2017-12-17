@@ -1,10 +1,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <unordered_map>
-#include <unordered_set>
-#include <map>
-#include <algorithm>
 
 using namespace std;
 
@@ -14,38 +10,44 @@ int main()
 	uint64_t genB = 191;
 	//uint64_t genA = 65;
 	//uint64_t genB = 8921;
+	
+	uint64_t counter_part1 = 0;
+	uint64_t counter_part2 = 0;
 
-	uint64_t rounds = 0;
-	uint64_t counter = 0;
-
-	vector<uint64_t> a_arr, b_arr;
-	a_arr.reserve(4000000);
-	b_arr.reserve(4000000);
-
-	//for (uint64_t round = 0; round < 40000000; round++)
-	//if (((genA % 4) == 0) && ((genB % 8) == 0) && (genA & 0xFFFF) == (genB & 0xFFFF))
-
-	for (uint64_t round = 0; a_arr.size() != 5000000 || b_arr.size() != 5000000; round++)
+	for (uint64_t round = 0; round < 40000000; round++)
 	{
 		genA *= 16807;
 		genA %= 2147483647;
 		genB *= 48271;
 		genB %= 2147483647;
 
-
-		if (((genA % 4) == 0) && a_arr.size() < 5000000)
-			a_arr.push_back(genA);
-		if (((genB % 8) == 0) && b_arr.size() < 5000000)
-			b_arr.push_back(genB);
+		if ((genA & 0xFFFF) == (genB & 0xFFFF)) {
+			counter_part1++;
+		}
 	}
 
-	for (uint64_t i = 0; i < 5000000; ++i)
+	cout << "Part 1: " << counter_part1 << endl;
+
+	genA = 512;
+	genB = 191;
+	for (uint64_t round = 0; round < 5000000; round++)
 	{
-		if ((a_arr[i] & 0xFFFF) == (b_arr[i] & 0xFFFF))
-			counter++;
+		do {
+			genA *= 16807;
+			genA %= 2147483647;
+		} while ((genA % 4) != 0);
+
+		do {
+			genB *= 48271;
+			genB %= 2147483647;	
+		} while ((genB % 8) != 0);
+		
+		if ((genA & 0xFFFF) == (genB & 0xFFFF)) {
+			counter_part2++;
+		}
 	}
 
-	cout << counter << endl;
+	cout << "Part 2: " << counter_part2 << endl;
 
 	return 0;
 }
