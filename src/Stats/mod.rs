@@ -6,29 +6,15 @@ use serde_json::{Value, Map};
 use std::cmp;
 use chrono::prelude::*;
 
-// use serde_json::Error;
-
-// struct StarCompletion {
-// 	get_star_ts : String; // DateTime?
-// }
-
-
 #[derive(Deserialize)]
 struct Member {
-	// last_star_ts : String,
-	// id : String,
 	local_score : i32,
 	name : String,
-	// global_score : i32,
-	// stars : i32,
 	completion_day_level : Map<String, Value>,
-// completion_day_level
 }
 
 #[derive(Deserialize)]
 struct LeaderBoard {
-	// event : String,
-	// owner_id : String,
 	members : Map<String, Value>,
 }
 
@@ -55,7 +41,7 @@ pub fn show_stats(day_filter : u32) {
 
 	members.sort_by(|a,b| b.local_score.cmp(&a.local_score));
 
-	let column_width = 20;
+	let column_width = 19;
 
 	print!("        ");
 	for mem in &members {
@@ -110,5 +96,4 @@ pub fn show_stats(day_filter : u32) {
 		}
 		println!(""); // End of day gap
 	}
-
 }
