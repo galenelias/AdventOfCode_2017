@@ -41,7 +41,7 @@ int main()
 		auto find_iter = dance_patterns.find(dancers);
 		if (find_iter != end(dance_patterns))
 		{
-			uint64_t period = i; // find_iter->second;
+			uint64_t period = i - find_iter->second;
 			uint64_t endPosition = 1000000000 % period;
 
 			cout << "end position: " << endPosition << endl;
