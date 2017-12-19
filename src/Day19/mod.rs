@@ -1,5 +1,21 @@
 use std::io::{self, BufRead};
 
+enum Dir { Up, Down, Left, Right, }
+
+fn move_dir(pos : (usize, usize), dir : &Dir) -> (usize, usize) {
+	match dir {
+		&Dir::Up => (pos.0 - 1, pos.1),
+		&Dir::Down => (pos.0 + 1, pos.1),
+		&Dir::Left => (pos.0, pos.1 - 1),
+		&Dir::Right => (pos.0, pos.1 + 1),
+	}
+}
+
+fn try_dir(grid: &Vec<Vec<char>>, pos : (usize, usize), dir : &Dir) -> bool {
+	let npos = move_dir(pos, dir);
+	grid[npos.0][npos.1] != ' '
+}
+
 pub fn solve() {
 	println!("Enter input:");
 	let stdin = io::stdin();
@@ -12,40 +28,27 @@ pub fn solve() {
 	let cols = grid[0].len();
 	grid.push(" ".repeat(cols).chars().collect());
 
-	let mut row = 0;
-	let mut col = grid[0].iter().position(|c| c == &'|').unwrap();
-	let mut row_dir : isize = 0;
-	let mut col_dir : isize = 1;
+	let mut pos = (0, grid[0].iter().position(|c| c == &'|').unwrap());
+	let mut dir = Dir::Down;
 	let mut steps = 0;
 	let mut path_str = String::new();
 	loop {
 		steps += 1;
 
-		if "ABCDEFGHIJKLMNOPQRSTUVWXYZ".contains(grid[row][col]) {
-			path_str.push(grid[row][col]);
+		if "ABCDEFGHIJKLMNOPQRSTUVWXYZ".contains(grid[pos.0][pos.1]) {
+			path_str.push(grid[pos.0][pos.1]);
 		}
-		if row_dir != 0 && grid[(row as isize + row_dir) as usize][col] == ' ' {
-			row_dir = 0;
-			if grid[row][col - 1] != ' ' {
-				col_dir = -1;
-			} else if grid[row][col + 1] != ' ' {
-				col_dir = 1;
+
+		if !try_dir(&grid, pos, &dir) {
+			match &dir {
+				&Dir::Up | &Dir::Down if try_dir(&grid, pos, &Dir::Left) => dir = Dir::Left,
+				&Dir::Up | &Dir::Down if try_dir(&grid, pos, &Dir::Right) => dir = Dir::Right,
+				&Dir::Left | &Dir::Right if try_dir(&grid, pos, &Dir::Up) => dir = Dir::Up,
+				&Dir::Left | &Dir::Right if try_dir(&grid, pos, &Dir::Down) => dir = Dir::Down,
+				_ => break,
 			}
-		} else if col_dir != 0 && grid[row][(col as isize + col_dir) as usize] == ' ' {
-			col_dir = 0;
-			if grid[row + 1][col] != ' ' {
-				row_dir = 1;
-			} else if grid[row - 1][col] != ' ' {
-				row_dir = -1;
-			}		
 		}
-
-		if row_dir == 0 && col_dir == 0 {
-			break;
-		}
-
-		row = (row as isize + row_dir) as usize;
-		col = (col as isize + col_dir) as usize;
+		pos = move_dir(pos, &dir);
 	}
 
 	println!("Part 1: {}", path_str);
