@@ -21,4 +21,6 @@ Dumping ground for Advent of Code 2017 solutions in various languages (C++, Rust
 | [Day 16](src/Day16/) | [✔](src/Day15/Day16.cpp) | [✔](src/Day16/mod.rs) |    |
 | [Day 17](src/Day17/) | [✔](src/Day15/Day17.cpp) | [✔](src/Day17/mod.rs) |    |
 | [Day 18](src/Day18/) |                          | [✔](src/Day18/mod.rs) |    |
+| [Day 18](src/Day19/) |                          | [✔](src/Day19/mod.rs) |    |
+| [Day 18](src/Day20/) |                          | [✔](src/Day20/mod.rs) |    |
 
