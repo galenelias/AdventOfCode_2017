@@ -20,6 +20,7 @@
         "hash_set": "cpp",
         "unordered_map": "cpp",
         "istream": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "__hash_table": "cpp"
     }
 }
