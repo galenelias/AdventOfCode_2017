@@ -9,36 +9,6 @@
 
 using namespace std;
 
-vector<string> split(const string& input, const string& separator)
-{
-	vector<string> result;
-	size_t last_pos = 0;
-	size_t pos = 0;
-	while ((pos = input.find(separator, last_pos)) != string::npos)
-	{
-		if (pos - last_pos > 0)
-			result.push_back(input.substr(last_pos, pos - last_pos));
-		last_pos = pos + separator.size();
-	}
-	result.push_back(input.substr(last_pos));
-	return result;
-}
-
-vector<string> split_any(const string& input, const string& separators)
-{
-	vector<string> result;
-	size_t last_pos = 0;
-	size_t pos = 0;
-	while ((pos = input.find_first_of(separators, last_pos)) != string::npos)
-	{
-		if (pos - last_pos > 0)
-			result.push_back(input.substr(last_pos, pos - last_pos));
-		last_pos = pos + 1;
-	}
-	result.push_back(input.substr(last_pos));
-	return result;
-}
-
 enum Direction {
 	Up, Right, Down, Left,
 };
@@ -46,6 +16,18 @@ enum Direction {
 enum State {
 	Clean, Weakened, Infected, Flagged
 };
+
+namespace std {
+	template <>
+	class hash<std::pair<int, int>>
+	{
+	public:
+		size_t operator()(const pair<int, int> &x) const
+		{
+			return x.first * 1337 + x.second;
+		}
+	};
+}
 
 int main()
 {
@@ -57,39 +39,33 @@ int main()
 		grid_input.push_back(input);
 	}
 
-	// set<pair<int,int>> infected;
-	map<pair<int,int>, State> states;
-
+	unordered_map<pair<int,int>, State> states;
 	for (int r = 0; r < grid_input.size(); r++)
-	{
 		for (int c = 0; c < grid_input[r].size(); c++)
-		{
 			if (grid_input[r][c] == '#')
 				states[{r-grid_input.size()/2, c-grid_input.size()/2}] = Infected;
-		}
-	}
 
 	pair<int,int> pos {0,0};
 	Direction dir = Up;
 	int infections = 0;
 	for (int i = 0; i < 10000000; i++)
 	{
-		State state = states[pos];
-		if (state == Infected) {
-			states[pos] = Flagged;
-			// turn right
-			dir = (Direction)((dir + 1) % 4);
-		} else if (state == Clean) {
-			states[pos] = Weakened;
-			// turn left
-			dir = (Direction)((dir + 3) % 4);
-		} else if (state == Flagged) {
-			states[pos] = Clean;
-			dir = (Direction)((dir + 2) % 4);
+		State& state = states[pos];
+		if (state == Clean) {
+			state = Weakened;
+			dir = (Direction)((dir + 3) % 4); // turn left
 		} else if (state == Weakened) {
-			states[pos] = Infected;
-			infections++;
+			state = Infected;
+		} else if (state == Infected) {
+			state = Flagged;
+			dir = (Direction)((dir + 1) % 4); // turn right
+		} else if (state == Flagged) {
+			state = Clean;
+			dir = (Direction)((dir + 2) % 4); // turn around
 		}
+
+		if (state == Infected)
+			infections++;
 
 		if (dir == Up)
 			pos = {pos.first - 1, pos.second};
