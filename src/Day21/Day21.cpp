@@ -92,8 +92,7 @@ size_t CountPixels(const vector<string>& image)
 
 int main()
 {
-	map<vector<string>,vector<string>> rules2x2;
-	map<vector<string>,vector<string>> rules3x3;
+	map<vector<string>,vector<string>> rules;
 
 	string input;
 	while (getline(cin, input) && !input.empty())
@@ -102,10 +101,7 @@ int main()
 		vector<string> left = split(rule2[0], "/");
 		vector<string> right = split(rule2[1], "/");
 
-		if (left.size() == 2)
-			AddPermutatons(left, right, rules2x2);
-		else if (left.size() == 3)
-			AddPermutatons(left, right, rules3x3);
+		AddPermutatons(left, right, rules);
 	}
 
 	vector<string> image {".#.","..#","###"};
@@ -114,20 +110,11 @@ int main()
 		if (i == 5)
 			cout << "Part 1: " << CountPixels(image) << endl;
 
-		if ((image.size() % 2) == 0)
-		{
-			int newSize = image.size() * 3 / 2;
-			vector<string> output(newSize, string(newSize, ' '));
-			Resample(image, output, 2, rules2x2);
-			image = output;
-		}
-		else if ((image.size() % 3) == 0)
-		{
-			int newSize = image.size() * 4 / 3;
-			vector<string> output(newSize, string(newSize, ' '));
-			Resample(image, output, 3, rules3x3);
-			image = output;
-		}
+		int sampleSize = ((image.size() % 2) == 0) ? 2 : 3;
+		int newSize = image.size() * (sampleSize + 1) / sampleSize;
+		vector<string> output(newSize, string(newSize, ' '));
+		Resample(image, output, sampleSize, rules);
+		image = std::move(output);
 	}
 
 	cout << "Part 2: " << CountPixels(image) << endl;
