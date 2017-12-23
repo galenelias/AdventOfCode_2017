@@ -123,6 +123,6 @@ pub fn solve() {
 		.map(|l| l.chars().collect::<Vec<_>>())
 		.collect();	
 
-	// part1(&lines);
+	part1(&lines);
 	part2(&lines);
 }
