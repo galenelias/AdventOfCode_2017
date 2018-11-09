@@ -21,6 +21,7 @@
         "unordered_map": "cpp",
         "istream": "cpp",
         "ostream": "cpp",
-        "__hash_table": "cpp"
+        "__hash_table": "cpp",
+        "locale": "cpp"
     }
 }

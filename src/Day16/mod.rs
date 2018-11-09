@@ -1,5 +1,4 @@
 use std::io::{self, BufRead};
-use std::ascii::AsciiExt;
 
 fn dance(dancers : &mut Vec<char>, moves : &Vec<&str>) {
 	for mv in moves {
@@ -7,8 +6,7 @@ fn dance(dancers : &mut Vec<char>, moves : &Vec<&str>) {
 		match instruction {
 			"s" => {
 				let x : usize = params.parse().unwrap();
-				let dancers_len = dancers.len();
-				dancers.rotate(dancers_len - x);
+				dancers.rotate_right(x);
 			}
 			"x" => {
 				let pair : Vec<&str> = params.split('/').collect();
@@ -56,7 +54,7 @@ pub fn solve() {
 	let stdin = io::stdin();
 	let input = stdin.lock().lines().next().unwrap().unwrap();
 
-	let dancers : Vec<char> = (0..16).map(|i| (0x61 + i).to_ascii_lowercase() as char).collect();
+	let dancers : Vec<char> = ((0 as u8)..(16 as u8)).map(|i| (0x61 + i) as char).collect();
 	let move_list = input.split(',').collect::<Vec<&str>>();
 
 	part1(dancers.clone(), &move_list);
