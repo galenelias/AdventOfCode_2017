@@ -6,15 +6,6 @@ struct Generator {
 	factor: u64,
 }
 
-impl Generator {
-	fn new(seed: u64, factor: u64) -> Generator {
-		Generator {
-			value: seed,
-			factor: factor,
-		}
-	}
-}
-
 impl Iterator for Generator {
 	type Item = u64;
 
@@ -25,11 +16,11 @@ impl Iterator for Generator {
 }
 
 fn generator_a(seed: u64) -> Generator {
-	Generator::new(seed, 16807)
+	Generator { value: seed, factor: 16807}
 }
 
 fn generator_b(seed: u64) -> Generator {
-	Generator::new(seed, 48271)
+	Generator { value: seed, factor: 48271}
 }
 
 pub fn solve() {
@@ -50,6 +41,5 @@ pub fn solve() {
 	let gen_a = generator_a(inputs[0]).filter(|x| (x % 4) == 0);
 	let gen_b = generator_b(inputs[1]).filter(|x| (x % 8) == 0);
 	let part2 = gen_a.take(5000000).zip(gen_b).filter(|&(a,b)| (a & 0xFFFF) == (b & 0xFFFF)).count(); 
-
 	println!("Part 2: {}", part2);
 }

@@ -1,7 +1,5 @@
 use std::io::{self, BufRead};
-use std::collections::HashSet;
-use std::collections::HashMap;
-use std::collections::VecDeque;
+use std::collections::{HashSet, HashMap, VecDeque};
 use regex::Regex;
 
 fn build_graph(input : Vec<Vec<i32>>) -> HashMap<i32,Vec<i32>> {

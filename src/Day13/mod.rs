@@ -1,5 +1,4 @@
 use std::io::{self, BufRead};
-use regex::Regex;
 
 struct Scanner {
 	depth: u32,
@@ -19,26 +18,18 @@ fn check_scanners(delay: u32, scanners: &Vec<Scanner>) -> (bool, u32) {
 }
 
 pub fn solve() {
-	let re = Regex::new("[[:digit:]]+").unwrap();
-
-	println!("Enter input:");
 	let stdin = io::stdin();
-	let lines: Vec<Vec<_>> = stdin.lock().lines()
+	let lines: Vec<Vec<u32>> = stdin.lock().lines()
 		.filter_map(|l| l.ok())
-		.map(|l| re.find_iter(&l)
-		.filter_map(|m| m.as_str().parse::<u32>().ok())
-		.collect())
+		.map(|l| l.split(": ").map(|w| w.parse::<u32>().unwrap()).collect())
 		.collect();
 
 	let scanners = lines.iter().map(|line| Scanner { depth: line[0], range: line[1] }).collect();
-	
+
 	println!("Part 1: {}", check_scanners(0 /*depth*/, &scanners).1);
 
-	for delay in 0.. {
-		let (hit, _score) = check_scanners(delay, &scanners);
-		if !hit {
-			println!("Part 2: {}", delay);
-			break;
-		}
-	}
+	let part2 = (0..)
+		.filter(|&delay| !check_scanners(delay, &scanners).0)
+		.next().unwrap();
+	println!("Part 2: {}", part2);
 }
