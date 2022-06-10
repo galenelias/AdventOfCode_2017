@@ -7,7 +7,7 @@ extern crate chrono;
 extern crate serde_derive;
 
 
-use clap::{Arg,App};
+use clap::{Arg,Command};
 
 mod stats;
 mod day1;
@@ -38,13 +38,12 @@ mod day25;
 
 fn main() {
 
-	let matches = App::new("Advent of Code")
+	let matches = Command::new("Advent of Code")
 		.author("Galen Elias, gelias@gmail.com")
 		.version("0.1.0")
 		.about("Advent of code solutions in Rust")
 		.arg(
-			Arg::with_name("day")
-				.short("d")
+			Arg::new("day")
 				.required(true)
 				.index(1)
 				.help("specifies which day's challenge to run")
@@ -52,11 +51,11 @@ fn main() {
 					str.parse::<u32>()
 						.or(Err("day must be an integer".to_owned()))
 						.and_then(|v| match v {
-							0...25 => Ok(()),
+							0..=25 => Ok(()),
 							_ => Err("day must be between 1 and 25".to_owned())
 						})))
 		.arg(
-			Arg::with_name("stats")
+			Arg::new("stats")
 				.long("stats")
 				.help("Parses leaderboard JSON into a readable format"))
 		.after_help("Longer explaination to appear after the options when \
